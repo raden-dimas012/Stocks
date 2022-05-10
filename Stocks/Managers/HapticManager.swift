@@ -6,3 +6,16 @@
 //
 
 import Foundation
+import UIKit
+
+final class HapticManager {
+    static let shared = HapticManager()
+    
+    private init() {}
+    
+    public func vibrateForSelection() {
+        
+    }
+    
+    
+}
