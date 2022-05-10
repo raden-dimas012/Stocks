@@ -9,7 +9,7 @@ import UIKit
 
 protocol SearchResultsViewControllerDelegate: AnyObject {
     
-    func searchResultsViewControllerDidSelect(searchResult: String)
+    func searchResultsViewControllerDidSelect(searchResult: SearchResult)
     
 }
 
@@ -17,12 +17,12 @@ class SearchResultsViewController: UIViewController {
     
     weak var delegate: SearchResultsViewControllerDelegate?
     
-    private var results: [String] = []
+    private var results: [SearchResult] = []
     
     private let tableView: UITableView = {
        let table = UITableView()
         table.register(SearchResultTableViewCell.self, forCellReuseIdentifier: SearchResultTableViewCell.identifier)
-        
+        table.isHidden = true
         return table
     }()
 
@@ -45,10 +45,10 @@ class SearchResultsViewController: UIViewController {
         tableView.dataSource = self
     }
     
-    public func update(with results: [String]) {
+    public func update(with results: [SearchResult]) {
         
         self.results = results
-        
+        tableView.isHidden = results.isEmpty
         tableView.reloadData()
     }
 
@@ -57,7 +57,7 @@ class SearchResultsViewController: UIViewController {
 extension SearchResultsViewController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return results.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -66,8 +66,10 @@ extension SearchResultsViewController: UITableViewDelegate,UITableViewDataSource
         
         var content = cell.defaultContentConfiguration()
         
-        content.text = "AAPL"
-        content.secondaryText = "Apple Inc"
+        let data = results[indexPath.row]
+        
+        content.text = data.displaySymbol
+        content.secondaryText = data.description
         
         cell.contentConfiguration = content
         
@@ -76,8 +78,8 @@ extension SearchResultsViewController: UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        
-        delegate?.searchResultsViewControllerDidSelect(searchResult: "APPL")
+        let data = results[indexPath.row]
+        delegate?.searchResultsViewControllerDidSelect(searchResult: data)
     }
     
     

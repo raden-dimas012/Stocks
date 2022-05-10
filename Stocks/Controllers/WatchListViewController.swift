@@ -13,16 +13,30 @@ import UIKit
 
 class WatchListViewController: UIViewController {
     
-    
-   
-    
+    private var searchTimer: Timer?
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         view.backgroundColor = .systemBackground
         setUpSearchController()
         setUpTitleView()
+        
     }
+    
+    // Child Controller Implementation
+//    private func setUpChild() {
+//        let panelViewController = PanelViewController()
+//
+//        addChild(panelViewController)
+//
+//        view.addSubview(panelViewController.view)
+//
+//        panelViewController.view.frame = CGRect(x: 0, y: view.height / 2, width: view.width, height: view.height)
+//
+//
+//
+//        panelViewController.didMove(toParent: self)
+//    }
     
     private func setUpTitleView() {
         let titleView = UIView(
@@ -57,16 +71,44 @@ extension WatchListViewController: UISearchResultsUpdating {
             return
         }
         
-//        print(query)
+//        debugPrint(query)
         
-        resultsViewController.update(with: ["GOOG"])
+        searchTimer?.invalidate()
+        
+        searchTimer = Timer.scheduledTimer(withTimeInterval: 0.3, repeats: false, block: { _ in
+            ApiCallerManager.shared.search(query: query) { result in
+                switch result {
+                case .success(let response):
+    //                debugPrint(response.result)
+                    DispatchQueue.main.async {
+                        resultsViewController.update(with: response.result)
+                    }
+                case .failure(let error):
+                    debugPrint(error)
+                    DispatchQueue.main.async {
+                        resultsViewController.update(with: [])
+                    }
+                }
+            }
+        })
+        
+        
                 
     }
 }
 
 extension WatchListViewController: SearchResultsViewControllerDelegate {
-    func searchResultsViewControllerDidSelect(searchResult: String) {
+    func searchResultsViewControllerDidSelect(searchResult: SearchResult) {
+//        debugPrint("Did select: \(searchResult.displaySymbol)")
         
+        navigationItem.searchController?.searchBar.resignFirstResponder()
+        
+        let detailViewController = StockDetailsViewController()
+        let navViewController = UINavigationController(rootViewController: detailViewController)
+        
+        detailViewController.title = searchResult.description
+        
+        present(navViewController, animated: true, completion: nil)
     }
     
 }
