@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-      
+        debug()
         return true
     }
 
@@ -34,7 +34,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     private func debug() {
-        
+        ApiCallerManager.shared.news(for: .company(symbol: "AAPL")) { result in
+            switch result {
+            case .success(let news):
+                debugPrint(news.count)
+            case .failure: break
+            }
+        }
     }
 
 

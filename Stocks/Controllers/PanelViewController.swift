@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PanelViewController: UIViewController {
+final class PanelViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -8,6 +8,24 @@
 import Foundation
 import UIKit
 
+
+extension DateFormatter {
+    static let newsDateFormatter: DateFormatter = {
+       let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        
+        return formatter
+    }()
+}
+
+extension UIView {
+    func addSubviews(_ views: UIView...) {
+        views.forEach{
+            addSubview($0)
+        }
+    }
+}
+
 extension UIView {
     var width: CGFloat {
         frame.size.width
@@ -32,7 +50,6 @@ extension UIView {
     var bottom: CGFloat {
         top + height
     }
-    
     
 }
 
