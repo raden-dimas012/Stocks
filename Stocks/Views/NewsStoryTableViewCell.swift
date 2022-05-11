@@ -21,10 +21,8 @@ final class NewsStoryTableViewCell: UITableViewCell {
         init(model: NewsStory) {
             self.source = model.source
             self.headline = model.headline
-            self.dateString = "Jun 21, 2022"
-            self.imageUrl = nil
-            
-            
+            self.dateString = .string(from: model.datetime)
+            self.imageUrl = URL(string: model.image)
         }
     }
     
@@ -37,20 +35,22 @@ final class NewsStoryTableViewCell: UITableViewCell {
     
     private let headlineLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .regular)
+        label.font = .systemFont(ofSize: 24, weight: .regular)
+        label.numberOfLines = 0
         return label
     }()
     
     private let dateLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17, weight: .light)
+        label.textColor = .secondaryLabel
+        label.font = .systemFont(ofSize: 14, weight: .light)
         return label
     }()
     
     
     private let storyImageView: UIImageView = {
        let imageView = UIImageView()
-        imageView.backgroundColor = .white
+        imageView.backgroundColor = .tertiarySystemBackground
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
         imageView.layer.cornerRadius = 6
@@ -64,8 +64,8 @@ final class NewsStoryTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
-        contentView.backgroundColor = .systemCyan
-        backgroundColor = .systemCyan
+        contentView.backgroundColor = .secondarySystemBackground
+        backgroundColor = .secondarySystemBackground
         
         addSubviews(sourceLabel,headlineLabel,dateLabel,storyImageView)
     }
@@ -122,5 +122,7 @@ final class NewsStoryTableViewCell: UITableViewCell {
         sourceLabel.text = viewModel.source
         dateLabel.text = viewModel.dateString
         
+        
+//        storyImageView.setImage(with: viewModel.imageUrl)
     }
 }
