@@ -34,12 +34,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     private func debug() {
-        ApiCallerManager.shared.news(for: .company(symbol: "AAPL")) { result in
+        ApiCallerManager.shared.marketData(for: "AAPL", numberOfDays: 1) { result in
+            
             switch result {
-            case .success(let news):
-                debugPrint(news.count)
-            case .failure: break
+            case .success(let data):
+                let candleStick = data.candleStick
+            case .failure(let error):
+                debugPrint(error)
             }
+            
         }
     }
 

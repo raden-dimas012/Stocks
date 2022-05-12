@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SafariServices
 
 final class NewsViewController: UIViewController {
     
@@ -24,9 +25,7 @@ final class NewsViewController: UIViewController {
     }
     
     
-    private var stories: [NewsStory] = [
-        NewsStory(category: "tech", datetime: 123, headline: "Some headline should go here!", id: 1112, image: "", related: "related", source: "unknown", summary: "it is", url: "no")
-    ]
+    private var stories = [NewsStory]()
     
     
     let tableView: UITableView = {
@@ -69,11 +68,24 @@ final class NewsViewController: UIViewController {
     }
     
     private func fetchNews() {
+        ApiCallerManager.shared.news(for: type) { [weak self] result in
+            switch result {
+            case .success(let stories):
+                DispatchQueue.main.async {
+                    self?.stories = stories
+                    self?.tableView.reloadData()
+                }
+            case .failure(let error):
+                debugPrint(error)
+            }
+        }
         
     }
     
     private func open(url: URL) {
+        let viewController = SFSafariViewController(url: url)
         
+        present(viewController,animated: true)
     }
 
 }
@@ -113,8 +125,19 @@ extension NewsViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        let story = stories[indexPath.row]
         
+        guard let url = URL(string: story.url) else {
+            presentFailedToOpenAlert()
+            return
+        }
+        open(url: url)
     }
     
-    
+    private func presentFailedToOpenAlert() {
+        let alert = UIAlertController(title: "Unable to Open", message: "We were unable to open the artcile", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        present(alert, animated: true)
+    }
+
 }
