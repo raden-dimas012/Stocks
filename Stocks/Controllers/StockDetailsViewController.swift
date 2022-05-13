@@ -16,6 +16,8 @@ final class StockDetailsViewController: UIViewController {
     
     private var stories: [NewsStory] = []
     
+    private var metrics: Metrics?
+    
     private let tableView: UITableView = {
       let table = UITableView()
         table.register(NewsHeaderView.self, forHeaderFooterViewReuseIdentifier: NewsHeaderView.identifier)
@@ -98,10 +100,24 @@ final class StockDetailsViewController: UIViewController {
         if candleStickData.isEmpty {
             group.enter()
             
+            
+            ApiCallerManager.shared.marketData(for: symbol) { [weak self] result in
+                
+                defer {
+                    group.leave()
+                }
+                switch result {
+                case .success(let response):
+                    self?.candleStickData = response.candleStick
+                case .failure(let error):
+                    debugPrint(error)
+                }
+            }
+            
         }
         
         group.enter()
-        ApiCallerManager.shared.financialMetric(for: symbol) { result in
+        ApiCallerManager.shared.financialMetric(for: symbol) { [weak self] result in
             defer {
                 group.leave()
             }
@@ -109,7 +125,7 @@ final class StockDetailsViewController: UIViewController {
             switch result {
             case .success(let response):
                 let metrics = response.metric
-                debugPrint(metrics)
+                self?.metrics = metrics
             case .failure(let error):
                 debugPrint(error)
             }
@@ -128,11 +144,51 @@ final class StockDetailsViewController: UIViewController {
             width: view.width,
             height: (view.width * 0.7) + 100 ))
         
-        headerView.backgroundColor = .link
+       
+        
+        var viewModels = [MetricCollectionViewCell.ViewModel]()
+        if let metrics = metrics {
+            viewModels.append(.init(name: "52W High", value: "\(metrics.annualWeekHigh)"))
+            viewModels.append(.init(name: "52L High", value: "\(metrics.annualWeekLow)"))
+            viewModels.append(.init(name: "52W Return", value: "\(metrics.annualWeekPriceReturnDaily)"))
+            viewModels.append(.init(name: "Beta", value: "\(metrics.beta)"))
+            viewModels.append(.init(name: "10D Vol.", value: "\(metrics.tenDayAverageTradingVolume)"))
+          
+        }
+       
+        let change = getChangePercentage(symbol: symbol, data: candleStickData)
+        
+        headerView.configure(
+            chartViewModel: .init(
+                data: candleStickData.reversed().map({ $0.close }),
+                showLegend: true,
+                showAxis: true,
+                filledColor: change < 0 ? .systemRed : .systemGreen
+            ),
+            metricViewModels: viewModels)
         
         tableView.tableHeaderView = headerView
         
         
+    }
+    
+    private func getChangePercentage(symbol: String,data: [CandleStick]) -> Double {
+        let laterDate = data[0].date
+        
+        
+        guard let latestClose = data.first?.close,
+            let priorClose = data.first(where: {
+                !Calendar.current.isDate($0.date,inSameDayAs: laterDate)
+            })?.close
+        else { return 0.0 }
+        
+//        debugPrint("\(symbol)  Current \(laterDate): \(latestClose) | Prior \(priorDate): \(priorClose)")
+        
+        let diff = 1 - (priorClose/latestClose)
+        
+//        debugPrint("\(symbol) : \(diff)%")
+        
+        return diff
     }
     
     @objc private func didTapClose() {

@@ -101,7 +101,11 @@ final class WatchListViewController: UIViewController {
                     price: getLatestClosingPrice(from: candleSticks),
                     changeColor: changePercentage < 0 ? .systemRed : .systemGreen,
                     changePercentage: .percentage(from: changePercentage),
-                    chartViewModel: .init(data: candleSticks.reversed().map({ $0.close }), showLegend: false, showAxis: false))
+                    chartViewModel: .init(
+                        data: candleSticks.reversed().map({ $0.close }),
+                        showLegend: false,
+                        showAxis: false,
+                        filledColor: changePercentage < 0 ? .systemRed : .systemGreen))
             )
         }
         

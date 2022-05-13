@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        debug()
+//        debug()
         return true
     }
 
@@ -33,18 +33,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     
-    private func debug() {
-        ApiCallerManager.shared.marketData(for: "AAPL", numberOfDays: 1) { result in
-            
-            switch result {
-            case .success(let data):
-                let candleStick = data.candleStick
-            case .failure(let error):
-                debugPrint(error)
-            }
-            
-        }
-    }
+//    private func debug() {
+//        ApiCallerManager.shared.marketData(for: "AAPL", numberOfDays: 1) { result in
+//            
+//            switch result {
+//            case .success(let data):
+//                let candleStick = data.candleStick
+//                debugPrint(candleStick)
+//            case .failure(let error):
+//                debugPrint(error)
+//            }
+//            
+//        }
+//    }
 
 
 }
