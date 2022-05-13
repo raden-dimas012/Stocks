@@ -80,11 +80,23 @@ final class ApiCallerManager {
         
     }
     
+    public func financialMetric(
+        for symbol: String,
+        completion: @escaping (Result<FinancialMetricsResponse,Error>) -> Void
+    ) {
+        request(url:
+            url(for: .financials,queryParams: ["symbol": symbol, "metric": "all"]),
+            expecting: FinancialMetricsResponse.self,
+            completion: completion
+        )
+    }
+    
     private enum Endpoint: String {
         case search
         case topStories = "news"
         case companyNews = "company-news"
         case marketData = "stock/candle"
+        case financials = "stock/metric"
     }
     
     private enum ApiError: Error {
@@ -106,7 +118,7 @@ final class ApiCallerManager {
         
         urlString += "?" + queryItems.map{ "\($0.name)=\($0.value ?? "")"}.joined(separator: "&")
         
-        debugPrint(urlString)
+//        debugPrint(urlString)
         
         return URL(string: urlString)
     }

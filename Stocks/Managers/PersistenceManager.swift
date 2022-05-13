@@ -27,12 +27,36 @@ final class PersistenceManager {
         return userDefaults.stringArray(forKey: Constants.watchlist) ?? []
     }
     
-    public func addToWatchlist() {
-        
+    public func watchlistContains(symbol: String) -> Bool {
+        return watchlist.contains(symbol)
     }
     
-    public func removeFromWatchlist() {
+    public func addToWatchlist(symbol: String,companyName: String) {
+        var current = watchlist
+        current.append(symbol)
         
+        userDefaults.set(current, forKey: Constants.watchlist)
+        
+        userDefaults.set(companyName, forKey: symbol)
+        
+        NotificationCenter.default.post(name: .didAddToWatchList, object: nil)
+    }
+    
+    public func removeFromWatchlist(symbol: String) {
+        var newList = [String]()
+        
+//        debugPrint("Deleting: \(symbol)")
+        
+        userDefaults.set(nil, forKey: symbol)
+        
+        for item in watchlist where item != symbol {
+//            debugPrint("\n \(item)")
+//            DispatchQueue.main.async {
+                newList.append(item)
+//            }
+        }
+        
+        userDefaults.set(newList, forKey: Constants.watchlist)
     }
     
     
@@ -47,9 +71,9 @@ final class PersistenceManager {
             "SNAP": "Snap Inc.",
             "GOOG": "Alphabet",
             "AMZN": "Amazon.com, Inc.",
-            "WORK": "Slack Technologies",
+//            "WORK": "Slack Technologies",
             "FB": "Facebook Inc.",
-            "NVDA": "Nvidia Inch.",
+            "NVDA": "Nvidia Inc.",
             "NKE": "Nike",
             "PINS": "Pinterest Inc."
         ]

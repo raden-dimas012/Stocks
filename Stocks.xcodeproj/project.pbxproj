@@ -27,6 +27,8 @@
 		E99ADB7C282BCB6B0096B5CC /* MarketDataResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99ADB7B282BCB6B0096B5CC /* MarketDataResponse.swift */; };
 		E99ADB7E282BD70A0096B5CC /* WatchListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99ADB7D282BD70A0096B5CC /* WatchListTableViewCell.swift */; };
 		E99ADB80282BD8FD0096B5CC /* StockChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E99ADB7F282BD8FD0096B5CC /* StockChartView.swift */; };
+		E9F033CA282DF33B00824DDE /* FinancialMetricsResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F033C9282DF33B00824DDE /* FinancialMetricsResponse.swift */; };
+		E9F033CC282DF6B000824DDE /* StockDetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F033CB282DF6B000824DDE /* StockDetailHeaderView.swift */; };
 		E9F85CD0282B4B1F00E07210 /* NewsStory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F85CCF282B4B1F00E07210 /* NewsStory.swift */; };
 		E9F85CD2282B54F900E07210 /* NewsStoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = E9F85CD1282B54F900E07210 /* NewsStoryTableViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -56,6 +58,8 @@
 		E99ADB7B282BCB6B0096B5CC /* MarketDataResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarketDataResponse.swift; sourceTree = "<group>"; };
 		E99ADB7D282BD70A0096B5CC /* WatchListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchListTableViewCell.swift; sourceTree = "<group>"; };
 		E99ADB7F282BD8FD0096B5CC /* StockChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockChartView.swift; sourceTree = "<group>"; };
+		E9F033C9282DF33B00824DDE /* FinancialMetricsResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinancialMetricsResponse.swift; sourceTree = "<group>"; };
+		E9F033CB282DF6B000824DDE /* StockDetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StockDetailHeaderView.swift; sourceTree = "<group>"; };
 		E9F85CCF282B4B1F00E07210 /* NewsStory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsStory.swift; sourceTree = "<group>"; };
 		E9F85CD1282B54F900E07210 /* NewsStoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsStoryTableViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -104,6 +108,7 @@
 				E952AFF3282A0E46004C2208 /* SearchResponse.swift */,
 				E9F85CCF282B4B1F00E07210 /* NewsStory.swift */,
 				E99ADB7B282BCB6B0096B5CC /* MarketDataResponse.swift */,
+				E9F033C9282DF33B00824DDE /* FinancialMetricsResponse.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -116,6 +121,7 @@
 				E9F85CD1282B54F900E07210 /* NewsStoryTableViewCell.swift */,
 				E99ADB7D282BD70A0096B5CC /* WatchListTableViewCell.swift */,
 				E99ADB7F282BD8FD0096B5CC /* StockChartView.swift */,
+				E9F033CB282DF6B000824DDE /* StockDetailHeaderView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -306,6 +312,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E9F033CA282DF33B00824DDE /* FinancialMetricsResponse.swift in Sources */,
 				E907ADE72829573E00BFA8B6 /* StockDetailsViewController.swift in Sources */,
 				E952AFF22829FA43004C2208 /* SearchResultTableViewCell.swift in Sources */,
 				E929C25027F97ED700047953 /* WatchListViewController.swift in Sources */,
@@ -314,6 +321,7 @@
 				E907ADE3282956EF00BFA8B6 /* NewsViewController.swift in Sources */,
 				E94046DB282A70020032AB69 /* NewsHeaderView.swift in Sources */,
 				E9F85CD0282B4B1F00E07210 /* NewsStory.swift in Sources */,
+				E9F033CC282DF6B000824DDE /* StockDetailHeaderView.swift in Sources */,
 				E9F85CD2282B54F900E07210 /* NewsStoryTableViewCell.swift in Sources */,
 				E99ADB80282BD8FD0096B5CC /* StockChartView.swift in Sources */,
 				E952AFF02829F6A6004C2208 /* Extensions.swift in Sources */,
