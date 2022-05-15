@@ -9,10 +9,31 @@ import Foundation
 import UIKit
 
 
+extension Array where Element == CandleStick {
+    func getPercentage() -> Double {
+        let laterDate = self[0].date
+        
+        
+        guard let latestClose = self.first?.close,
+              let priorClose = self.first(where: {
+                !Calendar.current.isDate($0.date,inSameDayAs: laterDate)
+            })?.close
+        else { return 0.0 }
+        
+//        debugPrint("\(symbol)  Current \(laterDate): \(latestClose) | Prior \(priorDate): \(priorClose)")
+        
+        let diff = 1 - (priorClose/latestClose)
+        
+//        debugPrint("\(symbol) : \(diff)%")
+        
+        return diff
+    }
+}
+
+// MARK : - Notification 
+
 extension Notification.Name {
     static let didAddToWatchList = Notification.Name("didAddToWatchList")
-    
-    
 }
 
 

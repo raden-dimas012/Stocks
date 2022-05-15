@@ -125,6 +125,8 @@ extension NewsViewController: UITableViewDelegate,UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
+        HapticManager.shared.vibrateForSelection()
+        
         let story = stories[indexPath.row]
         
         guard let url = URL(string: story.url) else {
@@ -135,6 +137,7 @@ extension NewsViewController: UITableViewDelegate,UITableViewDataSource {
     }
     
     private func presentFailedToOpenAlert() {
+        HapticManager.shared.vibrate(for: .error)
         let alert = UIAlertController(title: "Unable to Open", message: "We were unable to open the artcile", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         present(alert, animated: true)

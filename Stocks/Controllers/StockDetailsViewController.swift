@@ -8,6 +8,9 @@
 import UIKit
 import SafariServices
 
+
+///
+
 final class StockDetailsViewController: UIViewController {
     
     private let symbol: String
@@ -156,7 +159,7 @@ final class StockDetailsViewController: UIViewController {
           
         }
        
-        let change = getChangePercentage(symbol: symbol, data: candleStickData)
+        let change = candleStickData.getPercentage()
         
         headerView.configure(
             chartViewModel: .init(
@@ -172,24 +175,24 @@ final class StockDetailsViewController: UIViewController {
         
     }
     
-    private func getChangePercentage(symbol: String,data: [CandleStick]) -> Double {
-        let laterDate = data[0].date
-        
-        
-        guard let latestClose = data.first?.close,
-            let priorClose = data.first(where: {
-                !Calendar.current.isDate($0.date,inSameDayAs: laterDate)
-            })?.close
-        else { return 0.0 }
-        
+//    private func getChangePercentage(data: [CandleStick]) -> Double {
+//        let laterDate = data[0].date
+//
+//
+//        guard let latestClose = data.first?.close,
+//            let priorClose = data.first(where: {
+//                !Calendar.current.isDate($0.date,inSameDayAs: laterDate)
+//            })?.close
+//        else { return 0.0 }
+//
 //        debugPrint("\(symbol)  Current \(laterDate): \(latestClose) | Prior \(priorDate): \(priorClose)")
-        
-        let diff = 1 - (priorClose/latestClose)
-        
+//
+//        let diff = 1 - (priorClose/latestClose)
+//
 //        debugPrint("\(symbol) : \(diff)%")
-        
-        return diff
-    }
+//
+//        return diff
+//    }
     
     @objc private func didTapClose() {
         dismiss(animated: true, completion: nil)
@@ -243,6 +246,8 @@ extension StockDetailsViewController: UITableViewDelegate,UITableViewDataSource 
         
         guard let url = URL(string: stories[indexPath.row].url) else { return }
         
+        HapticManager.shared.vibrateForSelection()
+        
         let viewController = SFSafariViewController(url: url)
         
         present(viewController, animated: true)
@@ -254,6 +259,8 @@ extension StockDetailsViewController: NewsHeaderViewDelegate {
     func newsHeaderViewDidTapAddButton(_ headView: NewsHeaderView) {
         headView.button.isHidden = true
         PersistenceManager.shared.addToWatchlist(symbol: symbol, companyName: companyName)
+        
+        HapticManager.shared.vibrate(for: .success)
         
         let alert = UIAlertController(
             title: "Added to Watchlist",

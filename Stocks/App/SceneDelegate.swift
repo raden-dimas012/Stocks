@@ -8,7 +8,8 @@
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-
+    
+    /// Our window application
     var window: UIWindow?
 
 

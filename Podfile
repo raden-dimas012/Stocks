@@ -12,3 +12,15 @@ target 'Stocks' do
   pod 'Charts'
 
 end
+
+target 'StocksTest' do
+  # Comment the next line if you don't want to use dynamic frameworks
+  use_frameworks!
+
+  # Pods for Stocks
+	
+  pod 'FloatingPanel'
+  pod 'SDWebImage'
+  pod 'Charts'
+
+end

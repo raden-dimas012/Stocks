@@ -64,6 +64,7 @@ final class WatchListViewController: UIViewController {
         
         let group = DispatchGroup()
         
+        createPlaceholderViewModels()
     
         for symbol in symbols where watchlistMap[symbol] == nil {
             group.enter()
@@ -88,12 +89,37 @@ final class WatchListViewController: UIViewController {
         }
     }
     
+    private func createPlaceholderViewModels() {
+        let symbols = PersistenceManager.shared.watchlist
+        
+        symbols.forEach { item in
+            viewModels.append(
+                .init(
+                    symbol: item,
+                    companyName: UserDefaults.standard.string(forKey: item) ?? "Company",
+                    price: "0.00",
+                    changeColor: .systemGreen,
+                    changePercentage: "0.00",
+                    chartViewModel: .init(
+                        data: [],
+                        showLegend: false,
+                        showAxis: false,
+                        filledColor: .clear))
+            )
+        }
+        
+        self.viewModels = viewModels.sorted(by: { $0.symbol < $1.symbol })
+        tableView.reloadData()
+        
+        
+    }
+    
     private func createViewModels() {
         
         var viewModels = [WatchListTableViewCell.ViewModel]()
         
         for (symbol, candleSticks) in watchlistMap {
-            let changePercentage = getChangePercentage(symbol: symbol,data: candleSticks)
+            let changePercentage = candleSticks.getPercentage()
             viewModels.append(
                 .init(
                     symbol: symbol,
@@ -111,27 +137,27 @@ final class WatchListViewController: UIViewController {
         
 //        debugPrint("\(viewModels)")
         
-        self.viewModels = viewModels
+        self.viewModels = viewModels.sorted(by: { $0.symbol < $1.symbol })
     }
     
-    private func getChangePercentage(symbol: String,data: [CandleStick]) -> Double {
-        let laterDate = data[0].date
-        
-        
-        guard let latestClose = data.first?.close,
-            let priorClose = data.first(where: {
-                !Calendar.current.isDate($0.date,inSameDayAs: laterDate)
-            })?.close
-        else { return 0.0 }
-        
+//    private func getChangePercentage(data: [CandleStick]) -> Double {
+//        let laterDate = data[0].date
+//
+//
+//        guard let latestClose = data.first?.close,
+//            let priorClose = data.first(where: {
+//                !Calendar.current.isDate($0.date,inSameDayAs: laterDate)
+//            })?.close
+//        else { return 0.0 }
+//
 //        debugPrint("\(symbol)  Current \(laterDate): \(latestClose) | Prior \(priorDate): \(priorClose)")
-        
-        let diff = 1 - (priorClose/latestClose)
-        
+//
+//        let diff = 1 - (priorClose/latestClose)
+//
 //        debugPrint("\(symbol) : \(diff)%")
-        
-        return diff
-    }
+//
+//        return diff
+//    }
     
     private func getLatestClosingPrice(from data: [CandleStick]) -> String {
         guard let closingPrice = data.first?.close else {
@@ -238,6 +264,8 @@ extension WatchListViewController: SearchResultsViewControllerDelegate {
         
         navigationItem.searchController?.searchBar.resignFirstResponder()
         
+        HapticManager.shared.vibrateForSelection()
+        
         let detailViewController = StockDetailsViewController(
             symbol: searchResult.displaySymbol,
             companyName: searchResult.description)
@@ -308,6 +336,8 @@ extension WatchListViewController: UITableViewDelegate,UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+        HapticManager.shared.vibrateForSelection()
         
         let viewModel = viewModels[indexPath.row]
         
