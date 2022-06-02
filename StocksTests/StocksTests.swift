@@ -49,7 +49,7 @@ class StocksTests: XCTestCase {
             let current = dates[x]
             let next = dates[x+1]
             
-            XCTAssertTrue(current < next, "\(current) date should be greater than \(next) date)
+            XCTAssertTrue(current < next, "\(current) date should be greater than \(next) date")
         }
         
       

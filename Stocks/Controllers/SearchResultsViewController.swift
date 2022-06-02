@@ -69,6 +69,7 @@ extension SearchResultsViewController: UITableViewDelegate,UITableViewDataSource
         let data = results[indexPath.row]
         
         content.text = data.displaySymbol
+        
         content.secondaryText = data.description
         
         cell.contentConfiguration = content
